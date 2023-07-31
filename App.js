@@ -21,8 +21,8 @@ export default function App() {
 				style={styles.imageBG}
 			>
 				<KeyboardAvoidingView behavior={checkingDevice}>
-					<RegistrationScreen />
-					{/* <LoginScreen /> */}
+					{/* <RegistrationScreen /> */}
+					<LoginScreen />
 					{/* <PostsScreen /> */}
 				</KeyboardAvoidingView>
 			</ImageBackground>

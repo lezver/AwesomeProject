@@ -7,19 +7,31 @@ import {
 	View,
 	Keyboard,
 	TouchableWithoutFeedback,
+	Alert,
 } from "react-native";
 import add from "../images/add.png";
 import { useState } from "react";
 
 export const RegistrationScreen = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [login, setLogin] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-
+	const [userLogin, setUserLogin] = useState("");
+	const [userEmail, setUserEmail] = useState("");
+	const [userPassword, setUserPassword] = useState("");
 	const closeKeyboard = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
+	};
+
+	const registrationForm = () => {
+		setIsOpen(false);
+		Keyboard.dismiss();
+		Alert.alert(
+			"Credentials",
+			`login:${userLogin},email: ${userEmail}, password: ${userPassword}`
+		);
+		setUserLogin("");
+		setUserEmail("");
+		setUserPassword("");
 	};
 
 	return (
@@ -43,16 +55,16 @@ export const RegistrationScreen = () => {
 						style={styles.registrationInputs}
 						placeholder="Логін"
 						onFocus={() => setIsOpen(true)}
-						value={login}
-						onChangeText={setLogin}
+						value={userLogin}
+						onChangeText={setUserLogin}
 					/>
 
 					<TextInput
 						style={styles.registrationInputs}
 						placeholder="Адреса електронної пошти"
 						onFocus={() => setIsOpen(true)}
-						value={email}
-						onTextInput={setEmail}
+						value={userEmail}
+						onChangeText={setUserEmail}
 					/>
 
 					<View style={styles.registrationPasswordBox}>
@@ -61,8 +73,8 @@ export const RegistrationScreen = () => {
 							placeholder="Пароль"
 							secureTextEntry
 							onFocus={() => setIsOpen(true)}
-							value={password}
-							onChangeText={setPassword}
+							value={userPassword}
+							onChangeText={setUserPassword}
 						/>
 
 						<Text style={styles.registrationPasswordBoxSwitch}>Показати</Text>
@@ -71,7 +83,7 @@ export const RegistrationScreen = () => {
 
 				<TouchableOpacity
 					style={styles.registrationBoxButton}
-					onPress={closeKeyboard}
+					onPress={registrationForm}
 				>
 					<Text style={styles.registrationButtonText}>Зареєструватися</Text>
 				</TouchableOpacity>

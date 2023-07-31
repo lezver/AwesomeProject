@@ -7,16 +7,26 @@ import {
 	TouchableOpacity,
 	Keyboard,
 	TouchableWithoutFeedback,
+	Alert,
 } from "react-native";
 
 export const LoginScreen = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [userEmail, setUserEmail] = useState("");
+	const [userPassword, setUserPassword] = useState("");
 
 	const closeKeyboard = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
+	};
+
+	const loginForm = () => {
+		setIsOpen(false);
+		Keyboard.dismiss();
+		Alert.alert("Credentials", `Email:${userEmail}, Password:${userPassword}`);
+
+		setUserEmail("");
+		setUserPassword("");
 	};
 	return (
 		<TouchableWithoutFeedback onPress={closeKeyboard}>
@@ -28,8 +38,8 @@ export const LoginScreen = () => {
 						style={styles.loginInputs}
 						placeholder="Адреса електронної пошти"
 						onFocus={() => setIsOpen(true)}
-						value={email}
-						onChangeText={setEmail}
+						value={userEmail}
+						onChangeText={setUserEmail}
 					/>
 
 					<View style={styles.loginPasswordBox}>
@@ -38,15 +48,15 @@ export const LoginScreen = () => {
 							placeholder="Пароль"
 							secureTextEntry
 							onFocus={() => setIsOpen(true)}
-							value={password}
-							onChangeText={setPassword}
+							value={userPassword}
+							onChangeText={setUserPassword}
 						/>
 
 						<Text style={styles.loginPasswordBoxSwitch}>Показати</Text>
 					</View>
 				</View>
 
-				<TouchableOpacity style={styles.loginBoxButton} onPress={closeKeyboard}>
+				<TouchableOpacity style={styles.loginBoxButton} onPress={loginForm}>
 					<Text style={styles.loginBoxButtonText}>Зареєструватися</Text>
 				</TouchableOpacity>
 
