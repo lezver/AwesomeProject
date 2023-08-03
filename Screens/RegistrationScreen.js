@@ -7,96 +7,138 @@ import {
 	View,
 	Keyboard,
 	TouchableWithoutFeedback,
+	KeyboardAvoidingView,
 	Alert,
+	ImageBackground,
 } from "react-native";
 import add from "../images/add.png";
 import { useState } from "react";
+import PhotoBG from "../images/PhotoBG.png";
 
-export const RegistrationScreen = () => {
+const checkingDevice = Platform.OS === "ios" ? "padding" : "height";
+
+export const RegistrationScreen = ({ navigation }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [userLogin, setUserLogin] = useState("");
 	const [userEmail, setUserEmail] = useState("");
 	const [userPassword, setUserPassword] = useState("");
+	const [booleanValue, setBooleanValue] = useState(true);
+
 	const closeKeyboard = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
 	};
 
-	const registrationForm = () => {
+	const handlerRegistrationForm = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
-		Alert.alert(
-			"Credentials",
-			`login:${userLogin},email: ${userEmail}, password: ${userPassword}`
-		);
+
 		setUserLogin("");
 		setUserEmail("");
 		setUserPassword("");
 	};
 
+	const handlerShowPassword = () => setBooleanValue((prevState) => !prevState);
+
 	return (
-		<TouchableWithoutFeedback onPress={closeKeyboard}>
-			<View
-				style={{
-					...styles.registrationContainer,
-					height: isOpen ? 493 : 549,
-				}}
+		<View style={{ flex: 1 }}>
+			<ImageBackground
+				source={PhotoBG}
+				resizeMode="cover"
+				style={styles.imageBG}
 			>
-				<View style={styles.registrationAvatar}>
-					<TouchableOpacity style={styles.registrationAvatarAdd}>
-						<Image source={add} />
-					</TouchableOpacity>
-				</View>
+				<TouchableWithoutFeedback onPress={closeKeyboard}>
+					<KeyboardAvoidingView behavior={checkingDevice}>
+						<View
+							style={{
+								...styles.registrationForm,
+								height: isOpen ? 493 : 549,
+							}}
+						>
+							<View style={styles.registrationAvatar}>
+								<TouchableOpacity style={styles.registrationAvatarAdd}>
+									<Image source={add} />
+								</TouchableOpacity>
+							</View>
 
-				<Text style={styles.registrationTitle}>Реєстрація</Text>
+							<Text style={styles.registrationTitle}>Реєстрація</Text>
 
-				<View style={styles.registrationWrapper}>
-					<TextInput
-						style={styles.registrationInputs}
-						placeholder="Логін"
-						onFocus={() => setIsOpen(true)}
-						value={userLogin}
-						onChangeText={setUserLogin}
-					/>
+							<View style={styles.registrationWrapper}>
+								<TextInput
+									style={styles.registrationInputs}
+									placeholder="Логін"
+									inputMode="text"
+									onFocus={() => setIsOpen(true)}
+									value={userLogin}
+									onChangeText={setUserLogin}
+								/>
 
-					<TextInput
-						style={styles.registrationInputs}
-						placeholder="Адреса електронної пошти"
-						onFocus={() => setIsOpen(true)}
-						value={userEmail}
-						onChangeText={setUserEmail}
-					/>
+								<TextInput
+									style={styles.registrationInputs}
+									placeholder="Адреса електронної пошти"
+									inputMode="email"
+									onFocus={() => setIsOpen(true)}
+									value={userEmail}
+									onChangeText={setUserEmail}
+								/>
 
-					<View style={styles.registrationPasswordBox}>
-						<TextInput
-							style={styles.registrationInputs}
-							placeholder="Пароль"
-							secureTextEntry
-							onFocus={() => setIsOpen(true)}
-							value={userPassword}
-							onChangeText={setUserPassword}
-						/>
+								<View style={styles.registrationPasswordBox}>
+									<TextInput
+										style={{ ...styles.registrationInputs, paddingRight: 110 }}
+										placeholder="Пароль"
+										secureTextEntry={booleanValue}
+										onFocus={() => setIsOpen(true)}
+										value={userPassword}
+										onChangeText={setUserPassword}
+									/>
 
-						<Text style={styles.registrationPasswordBoxSwitch}>Показати</Text>
-					</View>
-				</View>
+									<TouchableOpacity
+										style={styles.registrationPasswordBoxSwitch}
+										onPress={handlerShowPassword}
+									>
+										<Text style={styles.registrationPasswordBoxSwitchText}>
+											{booleanValue ? "Показати" : "Сховати"}
+										</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
 
-				<TouchableOpacity
-					style={styles.registrationBoxButton}
-					onPress={registrationForm}
-				>
-					<Text style={styles.registrationButtonText}>Зареєструватися</Text>
-				</TouchableOpacity>
-
-				<Text style={styles.registrationLogin}>Вже є аккунт? Увійти</Text>
-			</View>
-		</TouchableWithoutFeedback>
+							<TouchableOpacity
+								style={styles.registrationBoxButton}
+								onPress={
+									(handlerRegistrationForm,
+									() =>
+										navigation.navigate("Home", {
+											name: userLogin,
+											email: userEmail,
+											// password: userPassword,
+										}))
+								}
+							>
+								<Text style={styles.registrationButtonText}>
+									Зареєструватися
+								</Text>
+							</TouchableOpacity>
+							<View style={styles.registrationLoginBox}>
+								<Text style={styles.registrationLoginBoxText}>
+									Вже є аккунт?
+								</Text>
+								<TouchableOpacity onPress={() => navigation.navigate("Login")}>
+									<Text style={styles.registrationLoginBoxBtnText}>Увійти</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</KeyboardAvoidingView>
+				</TouchableWithoutFeedback>
+			</ImageBackground>
+		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	registrationContainer: {
-		height: 549,
+	imageBG: { flex: 1, justifyContent: "flex-end" },
+	registrationForm: {
+		// height: 549,
 		width: "100%",
 		backgroundColor: "#ffffff",
 		borderTopLeftRadius: 25,
@@ -129,6 +171,7 @@ const styles = StyleSheet.create({
 		fontWeight: 500,
 		lineHeight: 35.16,
 		marginBottom: 32,
+		fontFamily: "DMMono-Medium",
 	},
 	registrationWrapper: {
 		width: "100%",
@@ -145,6 +188,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		borderRadius: 8,
 		color: "#212121",
+		fontFamily: "DMMono-Regular",
 	},
 	registrationPasswordBox: {
 		position: "relative",
@@ -152,12 +196,17 @@ const styles = StyleSheet.create({
 	},
 	registrationPasswordBoxSwitch: {
 		position: "absolute",
-		top: 16,
-		right: 16,
+		top: 1,
+		right: 1,
+		backgroundColor: "#F6F6F6",
+		padding: 16,
+		borderRadius: 8,
+	},
+	registrationPasswordBoxSwitchText: {
 		lineHeight: 18.75,
 		fontSize: 16,
 		color: "#1B4371",
-		backgroundColor: "#F6F6F6",
+		fontFamily: "DMMono-Regular",
 	},
 	registrationBoxButton: {
 		width: "100%",
@@ -172,10 +221,23 @@ const styles = StyleSheet.create({
 		color: "white",
 		lineHeight: 18.75,
 		textAlign: "center",
+		fontFamily: "DMMono-Medium",
 	},
-	registrationLogin: {
+	registrationLoginBox: {
+		flexDirection: "row",
+		gap: 16,
+	},
+	registrationLoginBoxText: {
 		lineHeight: 18.75,
 		fontSize: 16,
+		fontFamily: "DMMono-Regular",
 		color: "#1B4371",
+	},
+	registrationLoginBoxBtnText: {
+		lineHeight: 18.75,
+		fontSize: 16,
+		fontFamily: "DMMono-Medium",
+		color: "#1B4371",
+		textDecorationLine: "underline",
 	},
 });

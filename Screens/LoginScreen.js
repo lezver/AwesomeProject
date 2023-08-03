@@ -7,71 +7,118 @@ import {
 	TouchableOpacity,
 	Keyboard,
 	TouchableWithoutFeedback,
+	KeyboardAvoidingView,
 	Alert,
+	ImageBackground,
 } from "react-native";
+import PhotoBG from "../images/PhotoBG.png";
 
-export const LoginScreen = () => {
+const checkingDevice = Platform.OS === "ios" ? "padding" : "height";
+
+export const LoginScreen = ({ navigation }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [userEmail, setUserEmail] = useState("");
 	const [userPassword, setUserPassword] = useState("");
+	const [booleanValue, setBooleanValue] = useState(true);
 
 	const closeKeyboard = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
 	};
 
-	const loginForm = () => {
+	const handlerLoginForm = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
-		Alert.alert("Credentials", `Email:${userEmail}, Password:${userPassword}`);
 
 		setUserEmail("");
 		setUserPassword("");
 	};
+
+	const handlerShowPassword = () => setBooleanValue((prevState) => !prevState);
+
 	return (
-		<TouchableWithoutFeedback onPress={closeKeyboard}>
-			<View style={{ ...styles.loginContainer, height: isOpen ? 400 : 489 }}>
-				<Text style={styles.loginTitle}>Увійти</Text>
+		<View style={{ flex: 1 }}>
+			<ImageBackground
+				style={styles.imageBG}
+				source={PhotoBG}
+				resizeMode="cover"
+			>
+				<TouchableWithoutFeedback onPress={closeKeyboard}>
+					<KeyboardAvoidingView behavior={checkingDevice}>
+						<View style={{ ...styles.loginForm, height: isOpen ? 400 : 489 }}>
+							<Text style={styles.loginTitle}>Увійти</Text>
 
-				<View style={styles.loginWrapper}>
-					<TextInput
-						style={styles.loginInputs}
-						placeholder="Адреса електронної пошти"
-						onFocus={() => setIsOpen(true)}
-						value={userEmail}
-						onChangeText={setUserEmail}
-					/>
+							<View style={styles.loginWrapper}>
+								<TextInput
+									style={styles.loginInputs}
+									placeholder="Адреса електронної пошти"
+									onFocus={() => setIsOpen(true)}
+									value={userEmail}
+									onChangeText={setUserEmail}
+								/>
 
-					<View style={styles.loginPasswordBox}>
-						<TextInput
-							style={styles.loginInputs}
-							placeholder="Пароль"
-							secureTextEntry
-							onFocus={() => setIsOpen(true)}
-							value={userPassword}
-							onChangeText={setUserPassword}
-						/>
+								<View style={styles.loginPasswordBox}>
+									<TextInput
+										style={{ ...styles.loginInputs, paddingRight: 110 }}
+										placeholder="Пароль"
+										secureTextEntry={booleanValue}
+										onFocus={() => setIsOpen(true)}
+										value={userPassword}
+										onChangeText={setUserPassword}
+									/>
 
-						<Text style={styles.loginPasswordBoxSwitch}>Показати</Text>
-					</View>
-				</View>
+									<TouchableOpacity
+										style={styles.loginPasswordBoxSwitch}
+										onPress={handlerShowPassword}
+									>
+										<Text style={styles.loginPasswordBoxSwitchText}>
+											Показати
+										</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
 
-				<TouchableOpacity style={styles.loginBoxButton} onPress={loginForm}>
-					<Text style={styles.loginBoxButtonText}>Зареєструватися</Text>
-				</TouchableOpacity>
+							<TouchableOpacity
+								style={styles.loginBoxButton}
+								onPress={
+									(handlerLoginForm,
+									() =>
+										navigation.navigate("Home", {
+											email: userEmail,
+											// password: userPassword,
+										}))
+								}
+							>
+								<Text style={styles.loginBoxButtonText}>Зареєструватися</Text>
+							</TouchableOpacity>
 
-				<View style={styles.loginBoxToRegistration}>
-					<Text style={styles.loginBoxToRegistrationText}>Немає аккаунту?</Text>
+							<View style={styles.loginBoxToRegistration}>
+								<Text style={styles.loginBoxToRegistrationText}>
+									Немає аккаунту?
+								</Text>
 
-					<Text style={styles.loginBoxToRegistrationLink}>Зареєструватися</Text>
-				</View>
-			</View>
-		</TouchableWithoutFeedback>
+								<TouchableOpacity
+									onPress={() => navigation.navigate("Registration")}
+								>
+									<Text style={styles.loginBoxToRegistrationLink}>
+										Зареєструватися
+									</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</KeyboardAvoidingView>
+				</TouchableWithoutFeedback>
+			</ImageBackground>
+		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	loginContainer: {
+	imageBG: {
+		flex: 1,
+		justifyContent: "flex-end",
+	},
+	loginForm: {
 		height: 489,
 		width: "100%",
 		backgroundColor: "white",
@@ -89,6 +136,7 @@ const styles = StyleSheet.create({
 		fontWeight: 500,
 		lineHeight: 35.16,
 		marginBottom: 32,
+		fontFamily: "DMMono-Medium",
 	},
 	loginWrapper: {
 		width: "100%",
@@ -104,6 +152,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		padding: 16,
 		borderRadius: 8,
+		fontFamily: "DMMono-Regular",
 	},
 	loginPasswordBox: {
 		position: "relative",
@@ -111,12 +160,18 @@ const styles = StyleSheet.create({
 	},
 	loginPasswordBoxSwitch: {
 		position: "absolute",
-		top: 16,
-		right: 16,
+		top: 1,
+		right: 1,
+		backgroundColor: "#F6F6F6",
+		padding: 16,
+		borderRadius: 8,
+	},
+	loginPasswordBoxSwitchText: {
 		lineHeight: 18.75,
 		fontSize: 16,
 		color: "#1B4371",
-		backgroundColor: "#F6F6F6",
+
+		fontFamily: "DMMono-Regular",
 	},
 	loginBoxButton: {
 		width: "100%",
@@ -132,6 +187,7 @@ const styles = StyleSheet.create({
 		color: "white",
 		lineHeight: 18.75,
 		textAlign: "center",
+		fontFamily: "DMMono-Medium",
 	},
 	registrationLogin: {
 		lineHeight: 18.75,
@@ -140,12 +196,13 @@ const styles = StyleSheet.create({
 	},
 	loginBoxToRegistration: {
 		flexDirection: "row",
-		gap: 4,
+		gap: 16,
 	},
 	loginBoxToRegistrationText: {
 		lineHeight: 18.75,
 		fontSize: 16,
 		color: "#1B4371",
+		fontFamily: "DMMono-Regular",
 	},
 	loginBoxToRegistrationLink: {
 		lineHeight: 18.75,
