@@ -4,12 +4,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { PostsScreen } from "./PostsScreen";
 import { CreatePostsScreen } from "./CreatePostsScreen";
 import { ProfileScreen } from "./ProfileScreen";
-import logOutImg from "../images/log-out.png";
-import arrowleft from "../images/arrow-left.png";
+import {
+	MaterialIcons,
+	AntDesign,
+	SimpleLineIcons,
+	Feather,
+} from "@expo/vector-icons";
 import { useEffect } from "react";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
 
 const Tabs = createBottomTabNavigator();
 
@@ -17,6 +18,7 @@ export const Home = ({ navigation }) => {
 	const { params } = useRoute();
 
 	useEffect(() => {
+		navigation.navigate("ProfileScreen", params);
 		navigation.navigate("PostsScreen", params);
 	}, [params]);
 
@@ -50,11 +52,11 @@ export const Home = ({ navigation }) => {
 							style={{ marginRight: 10, marginBottom: 10 }}
 							onPress={() => navigation.navigate("Login")}
 						>
-							<Image source={logOutImg} />
+							<MaterialIcons name="logout" size={24} color="#BDBDBD" />
 						</TouchableOpacity>
 					),
 					tabBarIcon: ({ focused, color }) => (
-						<SimpleLineIcons name="grid" size="24" color={color} />
+						<SimpleLineIcons name="grid" size={24} color={color} />
 					),
 				}}
 			/>
@@ -69,11 +71,11 @@ export const Home = ({ navigation }) => {
 							style={{ marginLeft: 16, marginBottom: 10 }}
 							onPress={() => navigation.navigate("PostsScreen")}
 						>
-							<Image source={arrowleft} />
+							<AntDesign name="arrowleft" size={24} color="#212121CC" />
 						</TouchableOpacity>
 					),
 					tabBarIcon: ({ focused, color }) => (
-						<AntDesign name="plus" size="24" color={color} />
+						<AntDesign name="plus" size={24} color={color} />
 					),
 					tabBarStyle: {
 						display: "none",
@@ -87,7 +89,7 @@ export const Home = ({ navigation }) => {
 					title: "Профіль",
 					headerTitleStyle: baseTitle,
 					tabBarIcon: ({ focused, color }) => (
-						<Feather name="user" size="24" color={color} />
+						<Feather name="user" size={24} color={color} />
 					),
 					headerShown: false,
 				}}

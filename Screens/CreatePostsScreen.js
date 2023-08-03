@@ -6,16 +6,17 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import takePicture from "../images/take-a-picture.png";
-import mapPin from "../images/map-pin.png";
-import trash from "../images/trash.png";
+import { Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 export const CreatePostsScreen = () => {
 	return (
 		<View style={styles.createPostsScreenContainer}>
 			<View style={styles.createPostsScreenImgBox}>
-				<View style={styles.createPostsScreenImgSquare}>
-					<Image source={takePicture} />
+				<View style={styles.createPostsScreenImgBg}>
+					<View style={styles.createPostsScreenImgBgCamera}>
+						<FontAwesome name="camera" size={24} color="#BDBDBD" />
+					</View>
 				</View>
 				<TouchableOpacity style={styles.createPostsScreenImgBoxBtn}>
 					<Text style={styles.createPostsScreenImgBoxBtnText}>
@@ -32,7 +33,12 @@ export const CreatePostsScreen = () => {
 					style={{ ...styles.createPostsScreenInput, paddingLeft: 28 }}
 					placeholder="Місцевість..."
 				/>
-				<Image style={styles.createPostsScreenInputBoxIcon} source={mapPin} />
+				<Feather
+					style={styles.createPostsScreenInputBoxIcon}
+					name="map-pin"
+					size={24}
+					color="#BDBDBD"
+				/>
 			</View>
 			<TouchableOpacity style={styles.createPostsScreenInputBtnAdd}>
 				<Text style={styles.createPostsScreenInputBtnAddText}>
@@ -40,7 +46,7 @@ export const CreatePostsScreen = () => {
 				</Text>
 			</TouchableOpacity>
 			<TouchableOpacity style={styles.createPostsScreenInputBtnDelete}>
-				<Image source={trash} />
+				<Feather name="trash-2" size={24} color="#BDBDBD" />
 			</TouchableOpacity>
 		</View>
 	);
@@ -57,13 +63,21 @@ const styles = StyleSheet.create({
 		gap: 8,
 		marginBottom: 32,
 	},
-	createPostsScreenImgSquare: {
+	createPostsScreenImgBg: {
 		width: "100%",
 		height: 240,
 		backgroundColor: "#F6F6F6",
 		borderRadius: 8,
 		borderWidth: 1,
 		borderColor: "#E8E8E8",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	createPostsScreenImgBgCamera: {
+		height: 60,
+		width: 60,
+		borderRadius: 50,
+		backgroundColor: "#fff",
 		justifyContent: "center",
 		alignItems: "center",
 	},

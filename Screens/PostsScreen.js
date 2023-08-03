@@ -5,11 +5,9 @@ import {
 	Image,
 	ScrollView,
 	TouchableOpacity,
-	TouchableOpacityBase,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import message from "../images/message-circle.png";
-import mapPin from "../images/map-pin.png";
+import { Feather } from "@expo/vector-icons";
 
 export const PostsScreen = () => {
 	const { params } = useRoute();
@@ -24,8 +22,8 @@ export const PostsScreen = () => {
 				</View>
 			</View>
 			<ScrollView>
-				{["ліс", "ліс", "ліс", "ліс", "ліс", "ліс"].map((n) => (
-					<View style={styles.PostsScreenItem}>
+				{["ліс", "ліс", "ліс", "ліс", "ліс", "ліс"].map((n, index) => (
+					<View key={index} style={styles.PostsScreenItem}>
 						<Image style={styles.PostsScreenItemPicture} />
 						<Text style={styles.PostsScreenItemText}>{n}</Text>
 						<View style={styles.PostsScreenItemInfo}>
@@ -33,14 +31,19 @@ export const PostsScreen = () => {
 								<TouchableOpacity
 									style={styles.PostsScreenItemInfoAboutComment}
 								>
-									<Image source={message} />
+									<Feather
+										style={{ transform: [{ rotateY: "180deg" }] }}
+										name="message-circle"
+										size={24}
+										color="#BDBDBD"
+									/>
 								</TouchableOpacity>
 								<Text style={styles.PostsScreenItemInfoAboutCounter}>0</Text>
 							</View>
-							<View style={styles.PostsScreenItemInfoLocation}>
-								<Image source={mapPin} />
+							<View style={styles.PostsScreenItemInfoLocationBox}>
+								<Feather name="map-pin" size={24} color="#BDBDBD" />
 								<TouchableOpacity>
-									<Text style={styles.PostsScreenItemInfoLocationInfo}>
+									<Text style={styles.PostsScreenItemInfoLocationBoxText}>
 										bla bla bla
 									</Text>
 								</TouchableOpacity>
@@ -84,7 +87,6 @@ const styles = StyleSheet.create({
 		fontFamily: "DMMono-Regular",
 	},
 	PostsScreenItem: {
-		width: "100%",
 		marginBottom: 32,
 		gap: 8,
 	},
@@ -117,12 +119,12 @@ const styles = StyleSheet.create({
 		fontFamily: "DMMono-Regular",
 		color: "#BDBDBD",
 	},
-	PostsScreenItemInfoLocation: {
+	PostsScreenItemInfoLocationBox: {
 		flexDirection: "row",
 		gap: 8,
 		alignItems: "center",
 	},
-	PostsScreenItemInfoLocationInfo: {
+	PostsScreenItemInfoLocationBoxText: {
 		fontSize: 16,
 		lineHeight: 18.75,
 		fontFamily: "DMMono-Regular",

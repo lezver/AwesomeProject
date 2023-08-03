@@ -8,10 +8,9 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 	KeyboardAvoidingView,
-	Alert,
 	ImageBackground,
 } from "react-native";
-import add from "../images/add.png";
+import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import PhotoBG from "../images/PhotoBG.png";
 
@@ -57,7 +56,7 @@ export const RegistrationScreen = ({ navigation }) => {
 						>
 							<View style={styles.registrationAvatar}>
 								<TouchableOpacity style={styles.registrationAvatarAdd}>
-									<Image source={add} />
+									<AntDesign name="pluscircleo" size={24} color="#FF6C00" />
 								</TouchableOpacity>
 							</View>
 
@@ -138,7 +137,6 @@ export const RegistrationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	imageBG: { flex: 1, justifyContent: "flex-end" },
 	registrationForm: {
-		// height: 549,
 		width: "100%",
 		backgroundColor: "#ffffff",
 		borderTopLeftRadius: 25,
