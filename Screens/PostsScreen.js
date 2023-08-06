@@ -6,30 +6,48 @@ import {
 	ScrollView,
 	TouchableOpacity,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
-export const PostsScreen = () => {
-	const { params } = useRoute();
+export const PostsScreen = ({ route, navigation }) => {
+	const [posts, setPosts] = useState([]);
+
+	useEffect(() => {
+		if (route.params?.image) {
+			setPosts((prevState) => [...prevState, route.params]);
+		}
+	}, [route.params?.image]);
 
 	return (
 		<View style={styles.PostsScreenContainer}>
 			<View style={styles.PostsScreenUserBox}>
 				<Image style={styles.PostsScreenUserBoxImg} />
 				<View>
-					<Text style={styles.PostsScreenUserBoxName}>{params?.name}</Text>
-					<Text style={styles.PostsScreenUserBoxEmail}>{params?.email}</Text>
+					<Text style={styles.PostsScreenUserBoxName}>
+						{route.params?.name}
+					</Text>
+					<Text style={styles.PostsScreenUserBoxEmail}>
+						{route.params?.email}
+					</Text>
 				</View>
 			</View>
 			<ScrollView>
-				{["ліс", "ліс", "ліс", "ліс", "ліс", "ліс"].map((n, index) => (
+				{posts?.map((post, index) => (
 					<View key={index} style={styles.PostsScreenItem}>
-						<Image style={styles.PostsScreenItemPicture} />
-						<Text style={styles.PostsScreenItemText}>{n}</Text>
+						<Image
+							style={styles.PostsScreenItemPicture}
+							source={{ uri: post?.image }}
+						/>
+						<Text style={styles.PostsScreenItemText}>{post?.nameImg}</Text>
 						<View style={styles.PostsScreenItemInfo}>
 							<View style={styles.PostsScreenItemInfoAbout}>
 								<TouchableOpacity
 									style={styles.PostsScreenItemInfoAboutComment}
+									onPress={() =>
+										navigation.navigate("CommentsScreen", {
+											picture: post.image,
+										})
+									}
 								>
 									<Feather
 										style={{ transform: [{ rotateY: "180deg" }] }}
@@ -42,9 +60,15 @@ export const PostsScreen = () => {
 							</View>
 							<View style={styles.PostsScreenItemInfoLocationBox}>
 								<Feather name="map-pin" size={24} color="#BDBDBD" />
-								<TouchableOpacity>
+								<TouchableOpacity
+									onPress={() =>
+										navigation.navigate("MapScreen", {
+											location: post.location,
+										})
+									}
+								>
 									<Text style={styles.PostsScreenItemInfoLocationBoxText}>
-										bla bla bla
+										{post?.nameLocation}
 									</Text>
 								</TouchableOpacity>
 							</View>

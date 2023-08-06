@@ -8,7 +8,6 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 	KeyboardAvoidingView,
-	Alert,
 	ImageBackground,
 } from "react-native";
 import PhotoBG from "../images/PhotoBG.png";
@@ -83,10 +82,11 @@ export const LoginScreen = ({ navigation }) => {
 								onPress={
 									(handlerLoginForm,
 									() =>
-										navigation.navigate("Home", {
-											email: userEmail,
+										navigation.navigate(
+											"Home",
+											{ email: userEmail }
 											// password: userPassword,
-										}))
+										))
 								}
 							>
 								<Text style={styles.loginBoxButtonText}>Зареєструватися</Text>
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-end",
 	},
 	loginForm: {
-		height: 489,
 		width: "100%",
 		backgroundColor: "white",
 		marginTop: "auto",
@@ -170,7 +169,6 @@ const styles = StyleSheet.create({
 		lineHeight: 18.75,
 		fontSize: 16,
 		color: "#1B4371",
-
 		fontFamily: "DMMono-Regular",
 	},
 	loginBoxButton: {

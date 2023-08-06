@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { PostsScreen } from "./PostsScreen";
 import { CreatePostsScreen } from "./CreatePostsScreen";
 import { ProfileScreen } from "./ProfileScreen";
+import { CommentsScreen } from "./CommentsScreen";
+import { MapScreen } from "./MapScreen";
 import {
 	MaterialIcons,
 	AntDesign,
@@ -92,6 +94,50 @@ export const Home = ({ navigation }) => {
 						<Feather name="user" size={24} color={color} />
 					),
 					headerShown: false,
+				}}
+			/>
+			<Tabs.Screen
+				name="CommentsScreen"
+				component={CommentsScreen}
+				options={{
+					title: "Коментарі",
+					headerTitleStyle: baseTitle,
+					headerLeft: () => (
+						<TouchableOpacity
+							style={{ marginLeft: 16, marginBottom: 10 }}
+							onPress={() => navigation.navigate("PostsScreen")}
+						>
+							<AntDesign name="arrowleft" size={24} color="#212121CC" />
+						</TouchableOpacity>
+					),
+					tabBarItemStyle: {
+						display: "none",
+					},
+					tabBarStyle: {
+						display: "none",
+					},
+				}}
+			/>
+			<Tabs.Screen
+				name="MapScreen"
+				component={MapScreen}
+				options={{
+					title: "Мапа",
+					headerTitleStyle: baseTitle,
+					headerLeft: () => (
+						<TouchableOpacity
+							style={{ marginLeft: 16, marginBottom: 10 }}
+							onPress={() => navigation.navigate("PostsScreen")}
+						>
+							<AntDesign name="arrowleft" size={24} color="#212121CC" />
+						</TouchableOpacity>
+					),
+					tabBarItemStyle: {
+						display: "none",
+					},
+					tabBarStyle: {
+						display: "none",
+					},
 				}}
 			/>
 		</Tabs.Navigator>

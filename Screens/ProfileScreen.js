@@ -9,12 +9,19 @@ import {
 } from "react-native";
 import PhotoBG from "../images/PhotoBG.png";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useRoute } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
-export const ProfileScreen = ({ navigation }) => {
-	const { params } = useRoute();
+export const ProfileScreen = ({ navigation, route }) => {
+	const [posts, setPosts] = useState([]);
+	const [likes, setLikes] = useState(0);
+	useEffect(() => {
+		if (route.params?.image) {
+			setPosts((prevState) => [...prevState, route.params]);
+		}
+	}, [route.params?.image]);
+
 	return (
 		<View style={{ flex: 1 }}>
 			<ImageBackground
@@ -35,16 +42,27 @@ export const ProfileScreen = ({ navigation }) => {
 					>
 						<MaterialIcons name="logout" size={24} color="#BDBDBD" />
 					</TouchableOpacity>
-					<Text style={styles.profileScreenUserName}>{params?.name}</Text>
+					<Text style={styles.profileScreenUserName}>{route.params?.name}</Text>
 					<ScrollView>
-						{["forest", "forest", "forest"].map((f, index) => (
+						{posts?.map((post, index) => (
 							<View key={index} style={styles.profileScreenItem}>
-								<Image style={styles.profileScreenItemImg} />
-								<Text style={styles.profileScreenItemText}>{f}</Text>
+								<Image
+									style={styles.profileScreenItemImg}
+									source={{ uri: post?.image }}
+								/>
+								<Text style={styles.profileScreenItemText}>
+									{post?.nameImg}
+								</Text>
 								<View style={styles.profileScreenItemInfo}>
 									<View style={styles.profileScreenItemInfoFitback}>
 										<View style={styles.profileScreenItemInfoFitbackComment}>
-											<TouchableOpacity>
+											<TouchableOpacity
+												onPress={() =>
+													navigation.navigate("CommentsScreen", {
+														picture: post.image,
+													})
+												}
+											>
 												<Feather
 													style={{ transform: [{ rotateY: "180deg" }] }}
 													name="message-circle"
@@ -61,21 +79,27 @@ export const ProfileScreen = ({ navigation }) => {
 											</Text>
 										</View>
 										<View style={styles.profileScreenItemInfoFitbackLikes}>
-											<TouchableOpacity>
+											<TouchableOpacity onPress={() => setLikes(likes + 1)}>
 												<Feather name="thumbs-up" size={24} color="#FF6C00" />
 											</TouchableOpacity>
 											<Text
 												style={styles.profileScreenItemInfoFitbackLikesCounter}
 											>
-												233
+												{likes}
 											</Text>
 										</View>
 									</View>
 									<View style={styles.profileScreenItemInfoLocationBox}>
 										<Feather name="map-pin" size={24} color="#BDBDBD" />
-										<TouchableOpacity>
+										<TouchableOpacity
+											onPress={() =>
+												navigation.navigate("MapScreen", {
+													location: post.location,
+												})
+											}
+										>
 											<Text style={styles.profileScreenItemInfoLocationBoxText}>
-												Ukraine
+												{post?.nameLocation}
 											</Text>
 										</TouchableOpacity>
 									</View>
