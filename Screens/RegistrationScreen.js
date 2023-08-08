@@ -13,6 +13,8 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import PhotoBG from "../images/PhotoBG.png";
+import { registerDB } from "../redux/auth/oparations";
+import { useDispatch } from "react-redux";
 
 const checkingDevice = Platform.OS === "ios" ? "padding" : "height";
 
@@ -23,6 +25,8 @@ export const RegistrationScreen = ({ navigation }) => {
 	const [userPassword, setUserPassword] = useState("");
 	const [booleanValue, setBooleanValue] = useState(true);
 
+	const dispatch = useDispatch();
+
 	const closeKeyboard = () => {
 		setIsOpen(false);
 		Keyboard.dismiss();
@@ -32,9 +36,25 @@ export const RegistrationScreen = ({ navigation }) => {
 		setIsOpen(false);
 		Keyboard.dismiss();
 
+		const newUser = {
+			login: userLogin,
+			email: userEmail,
+			password: userPassword,
+		};
+
+		console.log(newUser);
+
+		dispatch(registerDB(newUser));
+
 		setUserLogin("");
 		setUserEmail("");
 		setUserPassword("");
+
+		// navigation.navigate("Home", {
+		// 	name: userLogin,
+		// 	email: userEmail,
+		// 	// password: userPassword,
+		// });
 	};
 
 	const handlerShowPassword = () => setBooleanValue((prevState) => !prevState);
@@ -104,15 +124,7 @@ export const RegistrationScreen = ({ navigation }) => {
 
 							<TouchableOpacity
 								style={styles.registrationBoxButton}
-								onPress={
-									(handlerRegistrationForm,
-									() =>
-										navigation.navigate("Home", {
-											name: userLogin,
-											email: userEmail,
-											// password: userPassword,
-										}))
-								}
+								onPress={handlerRegistrationForm}
 							>
 								<Text style={styles.registrationButtonText}>
 									Зареєструватися

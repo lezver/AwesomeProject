@@ -3,6 +3,10 @@ import "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LoginScreen, RegistrationScreen, Home } from "./Screens";
 import * as Font from "expo-font";
+import { store } from "./redux/store";
+// import persistor from "./redux/store";
+// import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
 
 const options = { headerShown: false };
 
@@ -17,20 +21,24 @@ export default function App() {
 	if (!fontsLoaded) return null;
 
 	return (
-		<NavigationContainer>
-			<MainStack.Navigator initialRouteName="Login">
-				<MainStack.Screen
-					name="Login"
-					component={LoginScreen}
-					options={options}
-				/>
-				<MainStack.Screen
-					name="Registration"
-					component={RegistrationScreen}
-					options={options}
-				/>
-				<MainStack.Screen name="Home" component={Home} options={options} />
-			</MainStack.Navigator>
-		</NavigationContainer>
+		<Provider store={store}>
+			{/* <PersistGate loading={null} persistor={persistor}> */}
+			<NavigationContainer>
+				<MainStack.Navigator initialRouteName="Login">
+					<MainStack.Screen
+						name="Login"
+						component={LoginScreen}
+						options={options}
+					/>
+					<MainStack.Screen
+						name="Registration"
+						component={RegistrationScreen}
+						options={options}
+					/>
+					<MainStack.Screen name="Home" component={Home} options={options} />
+				</MainStack.Navigator>
+			</NavigationContainer>
+			{/* </PersistGate> */}
+		</Provider>
 	);
 }
